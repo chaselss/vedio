@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="css/index.css"/>
+		
+	</head>
+	<body>
+		<div class="video">
+			<video src="" controls="controls" id="video"></video>
+			<div class="control_icon_box">
+				<i class="iconfont" id="play">&#xe62d;</i>
+				<div class="progress_box">
+					<span class="time"> <i class="currentTime"></i><i class="duration"></i></span>
+					<span class="progress"></span>
+					<span class="drag_progress"></span>
+				</div>
+				<div class="volume_box">
+					<i class="iconfont" id="volume">&#xe62f;</i>
+				</div>
+				<i class="iconfont" id="all">&#xe6e0;</i>
+				<i class="iconfont" id="download">&#xe600;</i>
+			</div>
+		</div>
+	</body>
+	<script src="js/jquery.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/draggable.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		
+		window.onload = function () {
+			var src = 'video/90B8015D26C51713A86A1B985458D61E.mp4';
+			var Ovideo = new video(src).init();
+			addClick(Ovideo);
+			
+		}
+		function addClick (video) {
+			
+			$("#play").on('click',function () {
+				if (video.isplay) {
+					video.pause();
+					this.innerHTML = '&#xe62d;';
+					video.eventTester('timeupdate',function (a) {
+						console.log(a+'8');
+					})
+				}else{
+					video.play();
+					this.innerHTML = '&#xe62c;';
+				}
+			}) 
+		}
+		function video(src) {
+			this.src = src;
+			this.isplay;
+			this.duration;
+			this.currentTime;
+		}
+		video.prototype = {
+			ele:$("#video"),
+			init:function(){
+				this.ele.attr('src',this.src);
+				this.currentTime = 0;
+				this.duration;
+				return this;
+			},
+			play:function () {		
+				this.ele.get(0).play();
+				this.isplay = true;
+				this.duration = this.ele.get(0).duration;
+				console.log(this.duration)
+			},
+			pause:function () {
+				this.ele.get(0).pause();
+				this.isplay = false;
+			},
+			eventTester:function(e,callback){
+			     this.ele.get(0).addEventListener(e,function () {
+			     	this.currentTime = this.ele.get(0).currentTime ;
+			     	console.log('8');
+			     	callback(this.currentTime);
+			     });
+		   	},
+		   	volume:function () {
+		   		if (arguments.length==0) {
+		   			return this.ele.get(0).volume;
+		   		}else{
+		   			this.ele.get(0).volume = arguments[0];
+		   		}
+		   	},
+		}
+	</script>
+</html>
